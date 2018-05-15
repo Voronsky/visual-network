@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Visual Network Mapper</title>
+        <script src="node_modules/vis/dist/vis.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <link href="node_modules/vis/dist/vis.css" rel="stylesheet" type="text/css"/>
+        <style type="text/css">
+         body {
+             background-color: black;
+         }
+
+         form {
+             color: white;
+         }
+
+         #network {
+             padding-right: 0;
+             margin-right: auto;
+             display: block;
+             left: 40%;
+             width: 70%;
+             height: 450px;
+             border: 1px solid lightgray;
+
+         }
+         #node-form {
+             position: absolute;
+             bottom: 50%;
+             right: 5%;
+         }
+         #btn-submit {
+             position: absolute;
+             bottom: 40%;
+             right: 5%;
+         }
+        </style>
+    </head>
+    <body>
+        <div id="network"></div>
+        <div id="node-form">
+            <form>
+                Destintion IP:<br>
+                <input type="text" name="dst" id="dst"><br>
+                Source IP:<br>
+                <input type="text" name="src" id="src"><br>
+            </form>
+        </div>
+        <div id="btn-submit">
+            <button type="submit" >Add nodes</button>
+        </div>
+    </body>
+</html>

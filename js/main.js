@@ -16,25 +16,34 @@ function setup(){
     var network = new vis.Network(container, data, options);
 
     btnSubmit = document.getElementById('btn-submit');
-    btnSubmit.addEventListener('click',updateNodes);
+    btnSubmit.addEventListener('click',updateMap);
 }
 
-function updateNodes() {
-    let dst = document.getElementById("dst").value;
+function updateMap() {
+    let dst = { id: ++counter, label: document.getElementById("dst").value};
     console.log(dst);
-    let src = document.getElementById("src").value;
+    let src = {id: ++counter, label:document.getElementById("src").value};
     console.log(src);
-    nodes.update([{id: counter++, label: src},
-                  {id: counter++, label: dst}]);
-    var id = nodes.getIds({
-        filter: function(node){
-            return(node.label === src);
-        }
-    });
-    if( id > 0 ){
-        edges.update([{from: id, to: 2}]);
-    }else {
-        edges.update([{from: 1, to: 2}]);
-    }
+    var ids = {
+        src: nodes.getIds({
+            filter: function(node){
+                return(node.label === src.label);
+            }
+        }),
+        dst: nodes.getIds({
+            filter: function(node){
+                return(node.label === dst.label);
+            }
+        })
+    };
     console.log(id);
+    if(id[0] > 0 ||  id.length > 0){
+        nodes.update([{id:dst.id, label: dst.label}]);
+        edges.update({from: id[0], to: dst.id});
+    }
+    else{
+        nodes.update([{id: src.id, label: src.label},
+                      {id: dst.id, label: dst.label}]);
+        edges.update([{from: src.id, to: dst.id}]);
+    }
 }

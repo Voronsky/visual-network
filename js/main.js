@@ -1,6 +1,7 @@
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 var btnSubmit,
+    iDIR = './images/';
     counter = 0;
 
 //populating container
@@ -20,9 +21,11 @@ function setup(){
 }
 
 function updateMap() {
-    let src = {id: ++counter, label:document.getElementById("src").value};
+    let src = {id: ++counter, label:document.getElementById("label").value,
+               title: document.getElementById('src').value};
     console.log(src);
-    let dst = { id: ++counter, label: document.getElementById("dst").value};
+    let dst = { id: ++counter, label: document.getElementById("label").value,
+                title: document.getElementById('dst').value};
     console.log(dst);
 
     //Check to see if any may exist already that have the exact labels
@@ -54,8 +57,10 @@ function updateMap() {
         edges.update({from: sid[0], to: did[0]});
     }
     else{
-        nodes.update([{id: src.id, label: src.label},
-                      {id: dst.id, label: dst.label}]);
+        nodes.update([{id: src.id, label: src.label, image: iDIR+'laptop.png',
+                       shape: 'image', title: src.title},
+                      {id: dst.id, label: dst.label, image: iDIR+'laptop.png',
+                       shape:'image', title: src.title}]);
         edges.update([{from: src.id, to: dst.id}]);
     }
 }

@@ -1,8 +1,10 @@
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 var btnSubmit,
-    iDIR = './images/';
-    counter = 0;
+    iDIR = './images/',
+    counter = 0,
+    optionSelector,
+    nodeForm;
 
 //populating container
 window.addEventListener("load",setup);
@@ -18,6 +20,15 @@ function setup(){
 
     btnSubmit = document.getElementById('btn-submit');
     btnSubmit.addEventListener('click',updateMap);
+    nodeForm = document.getElementById('node-form');
+    optionSelector = document.getElementById('optionSelector');
+    optionSelector.addEventListener('change',function(){
+        console.log(optionSelector.value);
+        if(optionSelector.value === 'computer'){
+            //nodeForm.style.dipslay = "block";
+            document.getElementById('node-form').style.display = 'block';
+        }
+    });
 }
 
 function updateMap() {
@@ -60,7 +71,7 @@ function updateMap() {
         nodes.update([{id: src.id, label: src.label, image: iDIR+'laptop.png',
                        shape: 'image', title: src.title},
                       {id: dst.id, label: dst.label, image: iDIR+'laptop.png',
-                       shape:'image', title: src.title}]);
+                       shape:'image', title: dst.title}]);
         edges.update([{from: src.id, to: dst.id}]);
     }
 }

@@ -26,18 +26,37 @@
          }
          #node-form {
              position: absolute;
-             bottom: 50%;
+             display: none;
+             bottom: 30%;
              right: 5%;
          }
-         #btn-submit {
+         #node-form #btn-submit {
              position: absolute;
-             bottom: 40%;
+             bottom: -30%;
+             right: 5%;
+         }
+         #menu {
+             position: absolute;
+             bottom: 75%;
              right: 5%;
          }
         </style>
     </head>
     <body>
         <div id="network"></div>
+        <div id="menu">
+            <div id="Label">
+            <font color="white">Choose what to map</font>
+            </div>
+            <select id="optionSelector">
+                <option selected disabled>Choose one</option>
+                <option value="router">Router</option>
+                <option value="wap">Wireless Access Point</option>
+                <option value="computer">Computer</option>
+                <option value="cellphone">Cellphone</option>
+                <option value="tablet">Tablet</option>
+            </select>
+        </div>
         <div id="node-form">
             <form>
                 Label:<br>
@@ -47,9 +66,9 @@
                 Source IP:<br>
                 <input type="text" name="src" id="src"><br>
             </form>
+            <div id="btn-submit">
+                <button type="submit" >Add nodes</button>
+            </div>
         </div>
-        <div id="btn-submit">
-            <button type="submit" >Add nodes</button>
-        </div>
-    </body>
+     </body>
 </html>

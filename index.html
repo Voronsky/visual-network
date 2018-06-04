@@ -5,42 +5,7 @@
         <script src="node_modules/vis/dist/vis.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
         <link href="node_modules/vis/dist/vis.css" rel="stylesheet" type="text/css"/>
-        <style type="text/css">
-         body {
-             background-color: black;
-         }
-
-         form {
-             color: white;
-         }
-
-         #network {
-             padding-right: 0;
-             margin-right: auto;
-             display: block;
-             left: 40%;
-             width: 70%;
-             height: 450px;
-             border: 1px solid lightgray;
-
-         }
-         #node-form {
-             position: absolute;
-             display: none;
-             bottom: 30%;
-             right: 5%;
-         }
-         #node-form #btn-submit {
-             position: absolute;
-             bottom: -30%;
-             right: 5%;
-         }
-         #menu {
-             position: absolute;
-             bottom: 75%;
-             right: 5%;
-         }
-        </style>
+        <link href="css/map.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div id="network"></div>
@@ -57,17 +22,43 @@
                 <option value="tablet">Tablet</option>
             </select>
         </div>
-        <div id="node-form">
+        <div id="node-router">
             <form>
                 Label:<br>
-                <input type="text" name="label" id="label"><br>
+                <input type="text" name="label" id="router-label"><br>
+                IP:<br>
+                <input type="text" name="router-src" id="router-src"><br>
+            </form>
+            <div id="router-submit">
+                <button type="submit" id="router-btn">Add router</button>
+            </div>
+        </div>
+        <div id="node-wap">
+            <form>
+                Label:<br>
+                <input type="text" name="label" id="wap-label"><br>
+                Choose for which Router:<br>
+                <select id="wap-src-selector">
+                    <option selected disabled>Choose source</option>
+                </select>
+            </form>
+            <div id="wap-submit">
+                <button type="submit" id="wap-btn">Add router</button>
+            </div>
+        </div>
+        <div id="node-computer">
+            <form>
+                Label for Destination:<br>
+                <input type="text" name="label" id="computer-label-dst"><br>
                 Destintion IP:<br>
                 <input type="text" name="dst" id="dst"><br>
-                Source IP:<br>
-                <input type="text" name="src" id="src"><br>
+                Choose Source:<br>
+                <select id="computer-src-selector">
+                    <option selected disabled>Choose source</option>
+                </select>
             </form>
-            <div id="btn-submit">
-                <button type="submit" >Add nodes</button>
+            <div id="computer-submit">
+                <button type="submit" id="computer-btn" >Add nodes</button>
             </div>
         </div>
      </body>

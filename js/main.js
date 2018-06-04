@@ -1,10 +1,14 @@
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
-var btnSubmit,
+var computerBtnSubmit,
+    routerBtnSubmit,
     iDIR = './images/',
     counter = 0,
     optionSelector,
-    nodeForm;
+    routerForm,
+    computerForm,
+    wapForm,
+    wapBtnSubmit;
 
 //populating container
 window.addEventListener("load",setup);
@@ -15,63 +19,192 @@ function setup(){
         nodes: nodes,
         edges: edges
     };
-    var options = {};
+    var options = { groups:{
+        routers:{},
+        computers:{}
+    }};
     var network = new vis.Network(container, data, options);
 
-    btnSubmit = document.getElementById('btn-submit');
-    btnSubmit.addEventListener('click',updateMap);
-    nodeForm = document.getElementById('node-form');
+    computerForm = document.getElementById('node-computer');
+    computerBtnSubmit = document.getElementById('computer-btn');
+    computerBtnSubmit.addEventListener('click',function(event){
+        updateMap('computer');
+    });
+    routerForm = document.getElementById('node-router');
+    routerBtnSubmit = document.getElementById('router-btn');
+    routerBtnSubmit.addEventListener('click',function(event){
+        updateMap('router');
+    });
+    wapForm = document.getElementById('node-wap');
+    wapBtnSubmit = document.getElementById('wap-submit');
+    wapBtnSubmit.addEventListener('click',function(event){
+        updateMap('wap');
+    });
     optionSelector = document.getElementById('optionSelector');
     optionSelector.addEventListener('change',function(){
         console.log(optionSelector.value);
         if(optionSelector.value === 'computer'){
-            //nodeForm.style.dipslay = "block";
-            document.getElementById('node-form').style.display = 'block';
+            const names = getAllNames();
+            const compSrcSelector = document.getElementById('computer-src-selector');
+            names.forEach(function(element){
+               compSrcSelector.options[compSrcSelector.options.length] = new Option(element);
+            });
+            document.getElementById('node-computer').style.display = 'block';
+            document.getElementById('node-router').style.display = 'none';
+            document.getElementById('node-wap').style.display = 'none';
+        }
+        else if(optionSelector.value === 'router'){
+            document.getElementById('node-router').style.display = 'block';
+            document.getElementById('node-computer').style.display = 'none';
+            document.getElementById('node-wap').style.display = 'none';
+        }
+        else if(optionSelector.value === 'wap'){
+
+            document.getElementById('node-router').style.display = 'none';
+            document.getElementById('node-computer').style.display = 'none';
+            document.getElementById('node-wap').style.display = 'block';
+            const routers = getRouters();
+            const wapSrcSelector = document.getElementById('wap-src-selector');
+            routers.forEach(function(element){
+                wapSrcSelector.options[wapSrcSelector.options.length] = new Option(element);
+            });
         }
     });
 }
 
-function updateMap() {
-    let src = {id: ++counter, label:document.getElementById("label").value,
-               title: document.getElementById('src').value};
-    console.log(src);
-    let dst = { id: ++counter, label: document.getElementById("label").value,
-                title: document.getElementById('dst').value};
-    console.log(dst);
+//Returns a list of names of  created nodes
+function getAllNames(){
+    let names = [];
+    const compIds = nodes.getIds({
+        filter: function(node){
+            return(node.group === 'computers');
+        }
+    });
+    compIds.forEach(function(element){
+        names.push(nodes.get(element).label);
+    });
 
-    //Check to see if any may exist already that have the exact labels
-    var ids = {
-        src: nodes.getIds({
-            filter: function(node){
-                return(node.label === src.label);
-            }
-        }),
-        dst: nodes.getIds({
-            filter: function(node){
-                return(node.label === dst.label);
-            }
-        })
-    };
-    console.log(ids.src);
-    let sid = ids.src;
-    console.log(ids.dst);
-    let did = ids.dst;
+    const routerIds = nodes.getIds({
+        filter: function(node){
+            return(node.group === 'routers');
+        }
+    });
 
-    //If the SRC id already exists but the DST does not
-    //else if the SRC and DST ids already exist, update the edge
-    //else add 2 new nodes
-    if(sid.length != 0 && did.length === 0){
-        nodes.update([{id:dst.id, label: dst.label}]);
-        edges.update({from: sid[0], to: dst.id});
+    routerIds.forEach(function(element){
+        names.push(nodes.get(element).label);
+    });
+
+    return names;
+}
+
+function getRouters(){
+    let names = [];
+    const routerIds = nodes.getIds({
+        filter: function(node){
+            return(node.group === 'routers');
+        }
+    });
+
+    routerIds.forEach(function(element){
+        names.push(nodes.get(element).label);
+    });
+
+    return names;
+}
+
+function updateMap(choice) {
+
+    console.log(choice+' was selected');
+    if(choice === 'computer'){
+        addComputer();
     }
-    else if(did.length != 0 && sid.length != 0){
-        edges.update({from: sid[0], to: did[0]});
+    else if(choice === 'router'){
+        addRouter();
     }
-    else{
-        nodes.update([{id: src.id, label: src.label, image: iDIR+'laptop.png',
-                       shape: 'image', title: src.title},
-                      {id: dst.id, label: dst.label, image: iDIR+'laptop.png',
-                       shape:'image', title: dst.title}]);
-        edges.update([{from: src.id, to: dst.id}]);
+    else if(choice === 'wap'){
+        addWap();
+    }
+    else {
+        console.log('Nothing');
     }
 }
+
+function addComputer(){
+
+    //retrieve a single node that matches the following filter
+    const srcs = nodes.getIds({
+        filter: function(node){
+            return(node.label === document.getElementById('computer-src-selector').value);
+        }
+    });
+    console.log(srcs);
+
+    const dst = { id: ++counter,
+                label: document.getElementById("computer-label-dst").value,
+                title: document.getElementById('dst').value};
+    console.log(dst);
+    
+    //If the SRC exists, add it to the DST
+    //Else , just add the node
+    if(srcs.length != 0){
+        const src = nodes.get(srcs[0]);
+        nodes.update([{id:dst.id,
+                       label: dst.label,
+                       title: 'IP: '+dst.title,
+                       shape: 'image',
+                       image: iDIR+'laptop.png',
+                       group: 'computers'}]);
+        edges.update({from: src.id, to: dst.id});
+    }
+    else{
+        nodes.update([{id: dst.id,
+                       label: dst.label,
+                       image: iDIR+'laptop.png',
+                       shape:'image',
+                       title: 'IP: '+dst.title,
+                       group: 'computers'}]);
+    }
+
+}
+
+function addRouter(){
+    nodes.update([{id: ++counter,
+                   label: document.getElementById('router-label').value,
+                   title: 'IP: '+document.getElementById('router-src').value,
+                   image: iDIR+'router.png',
+                   shape: 'image',
+                   group: 'routers'
+                  }]);
+}
+
+function addWap(){
+    const routerId = nodes.getIds({
+        filter: function(node){
+            return(node.label === document.getElementById('wap-src-selector').value);
+        }
+    });
+
+    console.log(routerId);
+    nodes.update([{id: ++counter,
+                   label: document.getElementById('wap-label').value,
+                   title: 'Router Source: '+document.getElementById('wap-src-selector').value,
+                   image: iDIR+'wireless.png',
+                   shape: 'image',
+                   group: 'routers'
+                  }]);
+    edges.update({from: nodes.get(routerId[0]).id, to: counter});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

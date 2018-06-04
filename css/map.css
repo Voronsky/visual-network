@@ -1,0 +1,63 @@
+body {
+    background-color: black;
+}
+
+form {
+    color: white;
+}
+
+#network {
+    padding-right: 0;
+    background-color: white;
+    margin-right: auto;
+    display: block;
+    left: 40%;
+    width: 70%;
+    height: 450px;
+    border: 1px solid lightgray;
+
+}
+
+#node-computer {
+    position: absolute;
+    display: none;
+    bottom: 40%;
+    right: 5%;
+}
+
+#node-computer #computer-submit {
+    position: absolute;
+    bottom: -30%;
+    right: 5%;
+}
+
+#node-router {
+    position: absolute;
+    display: none;
+    bottom: 45%;
+    right: 5%;
+}
+#node-router #router-submit {
+    position: absolute;
+    bottom: -30%;
+    right: 5%;
+}
+
+#node-wap {
+    position: absolute;
+    display: none;
+    bottom: 45%;
+    right: 5%;
+}
+
+#node-wap #wap-submit {
+    position: absolute;
+    bottom: -30%;
+    right: 5%;
+}
+
+#menu {
+    position: absolute;
+    bottom: 75%;
+    right: 5%;
+}
